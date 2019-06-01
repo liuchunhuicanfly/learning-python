@@ -61,7 +61,7 @@ dtype: int64
 ```
 
 #### DataFrame
-一个二维的表格型数据结构, 含有一组有序的列，每列可以是不同的值类型（数值，字符串，布尔值，None...），DataFrame既有行索引又有列索引，可以将它看做由Series组成的字典。
+一个二维的表格型数据结构, 含有一组有序的列，每列可以是不同的值类型（数值，字符串，布尔值，None, NaN...），DataFrame既有行索引又有列索引，可以将它看做由Series组成的字典。
 ```
 # 创建DataFrame
 
@@ -116,7 +116,7 @@ df.describe() # 返回每行数据简要的统计分析，如：数量，平均�
 
 #### 转置（Transposing）
 ```
-df.T
+df.T # 行列互换
 ```
 
 #### 排序（Sorting）
@@ -125,10 +125,119 @@ df.sort_index(axis=1, ascending=False) # 行列索引进行排序
 df.sort_values(by=['B', 'C']) # 通过指定列标签进行值的排序, 可以传入多列排序
 ```
 
-#### 选择（Selection）
+#### 选取（Selection）
+```
+df['A'] # 通过列标签选取， 读取的数据类型为Series
+df[['A', 'B', 'C']] # 选取多列，读取的数据类型为Dataframe
+df[0: 2] # 通过指定行索引范围选取, 选取范围为 0<= index < 2,；边界只存在一个的话代表向前或向后选取所有；
+df[[0, 1, 2]] # 选取多行
+df[['a':'b']] # 指定行标签选取多行
+```
 
+##### loc：通过label（行列名）来选取数据
+```
+df.loc['a'] # 指定行标签选取单行
+df.loc[:,['A','B']] # 指定列标签选取单列或多列
+df.loc['a': 'b', ['A','B']]) # 指定多行，多列
+df.loc['a',['A','B']] # 指定单行，多列
+df.loc[:, :] # 选取所有行列
+df.loc['a','A'] # 选取单个值
+df.at['a','A'] # 选取单个值，相较于loc更加高效
+```
 
+##### iloc: 通过 position（行列位置）来选取数据
+```
+df.iloc[0] # 选取单行
+df.iloc[0:3, 1:3] # 指定范围，选取多行，多列
+df.iloc[[1,2,4],[0,2]] # 选取多行，多列
+df.iloc[1:3, :] # 指定范围，选取多行
+df.iloc[:,1:3] # 指定范围，选取多列
+df.iloc[1, 1] # 选取单个值
+df.iat[1, 1] # 选取单个值，相较于iloc更加高效
+```
 
+#### 布尔值索引（Boolean Indexing）: 
+```
+df[df.A > 0] # 通过单列的值筛选数据， 返回的数据类型为Dataframe
+df[df > 0] # 从整个Dataframe筛选匹配数据，如果布尔条件不存在的话用NaN替换， 返回的数据类型为Dataframe
+
+# 用isin()方法进行筛选
+df2 = df.copy()
+df2['E'] = ['one','two','three','four']
+df2[df2['A'].isin(['one','two'])]
+```
+
+#### 列操作 (Setting)
+```
+# 通过索引添加新列
+newSeries = pd.Series(['q', 'w', 'e', 'r'], index=['a', 'b', 'c', 'd'])
+df['F'] = newSeries
+
+# 通过标签设置值
+df.at['a', 'A'] = 0
+
+# 通过位置属性设置值
+df.iat[0, 0] = 0
+
+# 通过分配NumPy数组设置整列
+df.loc[:,'A'] = np.array([2] * len(df))
+
+# 设置条件取反
+df2 = df.copy()
+df2[df2 > 0] = -df2
+
+# 行列加减乘除
+df['F'] + 'SSS' # 字符串列可以直接加上字符串，对整列进行操作
+df['A'] * 100 # 数字列直接加上或者乘以数字，对整列进行操作
+df['A'] * df['B'] # 两列之间可以直接操作
+
+# 新增列
+df['G'] = df['F'] + '_ss'
+```
+
+#### 空值处理（Missing Data）
+```
+# 删除空值行
+df.dropna(how='any') # 删除带有空值的行
+df.dropna(subset=['A', 'B'], how='any') # 在特定的列中判断空值
+# all代表全部为空，才会删除该行；any只要一个为空，就删除该行。
+
+# 补全空值
+df.fillna(value=5) # 将所有空值赋值为固定的值
+df['A'].fillna(value=df['B'], inplace=True) # 将缺失值赋值为其他列的数据
+
+# 找出空值
+df.notnull() # 判断是否为空值， <=> notnull()
+df[df['A'].notnull()] # 将'A'列为空的行输出
+pd.isna(df) # 判断是否为空值， <=> notna()
+```
+
+#### 统计函数（statistic）
+```
+# mean()
+df.mean() # 求每列的均值, 自动排除空值
+df.mean(1) # 求每行的均值, 自动排除空值
+df[['A', 'B']].mean() # 求单列或多列的均值
+df[['a', 'b']].mean() # 求单行或多行的均值
+
+# max() 最大值
+
+# min() 最小值
+
+# std() 标准差
+
+# count() 非空数据的数量,
+
+# median() 中位数
+
+# quantile(0.25) # 25%分位数
+
+ps: 传入参数0、1分别显示列，行, 默认为列
+```
+
+### PS: 更多方法请至官方文档进行查询 
+[Pandas](http://pandas.pydata.org/)
+[Pandas中文文档](https://www.pypandas.cn)
 
 
 
