@@ -235,7 +235,246 @@ df[['a', 'b']].mean() # 求单行或多行的均值
 ps: 传入参数0、1分别显示列，行, 默认为列
 ```
 
-### PS: 更多方法请至官方文档进行查询 
+#### Apply 函数
+```
+# mean()
+
+df.apply(np.cumsum) # 数据累加
+
+df.apply(lambda x: x.max() - x.min()) # 计算每列最大值，最小值之差
+```
+
+#### 直方图（Histogramming）
+```
+s = pd.Series(np.random.randint(0, 7, size=10))
+s.value_counts()
+```
+
+#### 字符处理（String）
+```
+# 转化为小写
+s = pd.Series(['A', 'B', 'C', 'Aaba', 'Baca', np.nan, 'CABA', 'dog', 'cat'])
+s.str.lower()
+```
+
+#### 合并（Merge）
+```
+# 使用 concat() 连接pandas对象 
+df = pd.DataFrame(np.random.randn(10, 4))
+# 切片
+pieces = [df[:3], df[3:7], df[7:]]
+pd.concat(pieces)
+
+# join 合并
+left = pd.DataFrame({'key': ['foo', 'foo'], 'lval': [1, 2]})
+right = pd.DataFrame({'key': ['foo', 'foo'], 'rval': [4, 5]})
+pd.merge(left, right, on='key')
+```
+
+#### 添加（Append）
+```
+# append()
+df = pd.DataFrame(np.random.randn(8, 4), columns=['A','B','C','D'])
+s = df.iloc[3]
+df.append(s, ignore_index=True) # ignore_index 是否忽略行索引
+```
+
+#### 分组（Grouping）
+###### 分组常常意味着可能包含以下的几种的操作中一个或多个:
+* 依据一些标准分离数据
+* 对组单独地应用函数
+* 将结果合并到一个数据结构中
+
+```
+df = pd.DataFrame({'A' : ['foo', 'bar', 'foo', 'bar',
+    'foo', 'bar', 'foo', 'foo'],
+   'B' : ['one', 'one', 'two', 'three',
+    'two', 'two', 'one', 'three'],
+   'C' : np.random.randn(8),
+   'D' : np.random.randn(8)})
+
+# 对单个分组应用函数，数据被分成了 bar 组与 foo 组，分别计算总和。
+df.groupby('A').sum()
+
+# 依据多个列分组会构成一个分级索引
+df.groupby(['A','B']).sum()
+'''
+bar one -1.814470 2.395985
+    three -0.595447 0.166599
+    two -0.392670 -0.136473
+foo one -1.195665 -0.616981
+    three 1.928123 -1.623033
+    two 2.414034 1.600434
+'''
+```
+
+#### 形变（Reshaping）
+```
+#  stack() 压缩列的级别， 将列添加为分级索引
+
+# unstack() 解压dataFrame索引，默认解压最后一级索引
+```
+
+#### 透视表（Pivot Tables）
+```
+# 生成数据透视表
+df = pd.DataFrame({'A' : ['one', 'one', 'two', 'three'] * 3,
+   'B' : ['A', 'B', 'C'] * 4,
+   'C' : ['foo', 'foo', 'foo', 'bar', 'bar', 'bar'] * 2,
+   'D' : np.random.randn(12),
+   'E' : np.random.randn(12)})
+pd.pivot_table(df, values='D', index=['A', 'B'], columns=['C']) # 选中一列数据进行展示，以其他列分别作为索引和列，
+'''
+C             bar       foo
+A     B
+one   A -0.859045 -0.685425
+      B -0.642739  0.345685
+      C  0.085087  0.749008
+three A -1.754995       NaN
+      B       NaN -3.274415
+      C  0.258929       NaN
+two   A       NaN -1.438146
+      B -0.716127       NaN
+      C       NaN  0.457345
+'''
+```
+
+#### 时间序列（Time Series）
+```
+# pandas 拥有既简单又强大的频率变换重新采样功能，下面的例子从 1次/秒 转换到了 1次/5分钟：
+rng = pd.date_range('1/1/2012', periods=100, freq='S')
+ts = pd.Series(np.random.randint(0, 500, len(rng)), index=rng)
+ts.resample('5Min').sum()
+'''
+2012-01-01    25083
+Freq: 5T, dtype: int64
+'''
+
+# 本地化时区表示
+rng = pd.date_range('3/6/2012 00:00', periods=5, freq='D')
+ts = pd.Series(np.random.randn(len(rng)), rng)
+'''
+2012-03-06    0.464000
+2012-03-07    0.227371
+2012-03-08   -0.496922
+2012-03-09    0.306389
+2012-03-10   -2.290613
+Freq: D, dtype: float64
+'''
+
+ts_utc = ts.tz_localize('UTC')
+'''
+2012-03-06 00:00:00+00:00    0.464000
+2012-03-07 00:00:00+00:00    0.227371
+2012-03-08 00:00:00+00:00   -0.496922
+2012-03-09 00:00:00+00:00    0.306389
+2012-03-10 00:00:00+00:00   -2.290613
+Freq: D, dtype: float64
+'''
+
+# 转换为其他时区
+ts_utc.tz_convert('US/Eastern')
+'''
+2012-03-05 19:00:00-05:00    0.464000
+2012-03-06 19:00:00-05:00    0.227371
+2012-03-07 19:00:00-05:00   -0.496922
+2012-03-08 19:00:00-05:00    0.306389
+2012-03-09 19:00:00-05:00   -2.290613
+Freq: D, dtype: float64
+'''
+
+# 转换为时间跨度表示的形式
+rng = pd.date_range('1/1/2012', periods=5, freq='M')
+ts = pd.Series(np.random.randn(len(rng)), index=rng)
+'''
+2012-01-31   -1.134623
+2012-02-29   -1.561819
+2012-03-31   -0.260838
+2012-04-30    0.281957
+2012-05-31    1.523962
+Freq: M, dtype: float64
+'''
+
+# 转换为时间戳
+ps = ts.to_period()
+# 转换为时间戳
+ps.to_timestamp()
+```
+
+#### 分类（Categoricals）
+```
+df = pd.DataFrame({"id":[1,2,3,4,5,6], "raw_grade":['a', 'b', 'b', 'a', 'a', 'e']})
+
+# 将 raw_grades 转换成 Categoricals 类型
+df["grade"] = df["raw_grade"].astype("category")
+'''
+0    a
+1    b
+2    b
+3    a
+4    a
+5    e
+Name: grade, dtype: category
+Categories (3, object): [a, b, e]
+'''
+
+# 重命名分类
+df["grade"] = df["grade"].cat.set_categories(["very bad", "bad", "medium", "good", "very good"])
+
+# 根据分类的顺序对数据进行排序
+df.sort_values(by="grade")
+'''
+id raw_grade      grade
+5   6         e   very bad
+1   2         b       good
+2   3         b       good
+0   1         a  very good
+3   4         a  very good
+4   5         a  very good
+'''
+# 根据分类分组计数
+df.groupby("grade").size()
+'''
+grade
+very bad     1
+bad          0
+medium       0
+good         2
+very good    3
+dtype: int64
+'''
+```
+
+#### 绘图（Plotting）
+```
+ts = pd.Series(np.random.randn(1000), index=pd.date_range('1/1/2000', periods=1000))
+ts = ts.cumsum()
+ts.plot()
+
+```
+
+#### 文件读取和生成（CSV, HDF5, Excel）
+```
+# 从 csv 文件读取数据
+pd.read_csv('foo.csv')
+
+# 保存到 csv 文件
+df.to_csv('foo.csv')
+
+# 读取 excel 文件
+pd.read_excel('foo.xlsx', 'Sheet1', index_col=None, na_values=['NA'])
+
+# 保存到 excel 文件
+df.to_excel('foo.xlsx', sheet_name='Sheet1')
+
+# 读取 HDF5
+pd.read_hdf('foo.h5','df')
+
+# 保存 HDF5
+df.to_hdf('foo.h5','df')
+```
+
+##### PS: 更多方法请至官方文档进行查询 
 [Pandas](http://pandas.pydata.org/)
 [Pandas中文文档](https://www.pypandas.cn)
 
