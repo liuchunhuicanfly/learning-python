@@ -62,5 +62,25 @@ c  3  3  3  3
 d  4  4  4  4
 """
 
+# 查看每列的数据类型
+# df.dtypes
+"""
+A    int64
+B    int64
+C    int64
+D    int64
+dtype: object
+"""
+
+df.head()
+"""
+   A  B  C  D
+a  1  1  1  1
+b  2  2  2  2
+c  3  3  3  3
+d  4  4  4  4
+"""
+
+
 
 

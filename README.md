@@ -186,6 +186,10 @@
 * 大数据分析入门
 * Tensorflow入门
 
+##### 内容参考
+* [Python-100-Days](https://github.com/jackfrued/Python-100-Days)
+* [利用Python进行数据分析 第2版](https://book.douban.com/subject/30283996/)
+
 
 
 
