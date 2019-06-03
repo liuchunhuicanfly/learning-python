@@ -50,11 +50,7 @@
 * 使用正则表达式 - re模块 \ compile函数 \ group和groups方法 \ match方法 \ search方法 \ * findall和finditer方法 \ sub和subn方法 \ split方法
 * 应用案例 - 使用正则表达式验证输入的字符串
 
-### 网络应用开发
-* 访问网络API - 网络API概述 / 访问URL / requests模块 / 解析JSON格式数据
-* 文件传输 - FTP协议 / ftplib模块 / 交互式FTP应用
-* 电子邮件 - SMTP协议 / POP3协议 / IMAP协议 / smtplib模块 / poplib模块 / imaplib模块
-* 短信服务 - twilio模块 / 国内的短信服务
+
 
 ### 图像和文档处理
 * 用Pillow处理图片 - 图片读写 / 图片合成 / 几何变换 / 色彩转换 / 滤镜效果
@@ -97,6 +93,33 @@
 * 表单的处理
 * 数据库操作
 * 项目实战
+
+## 数据处理和机器学习
+* 机器学习基础
+* Pandas的应用
+    * 数据加载、存储与文件格式
+    * 数据清洗和准备
+    * 数据规整：聚合、合并和重塑
+    * 绘图和可视化
+    * 数据聚合与分组运算
+    * 时间序列
+* NumPy和SciPy的应用
+* Matplotlib和数据可视化
+* k最近邻(KNN)分类
+* 决策树
+* 贝叶斯分类
+* 支持向量机(SVM)
+* K-均值聚类
+* 回归分析
+* 大数据分析入门
+* Tensorflow入门
+
+
+### 网络应用开发
+* 访问网络API - 网络API概述 / 访问URL / requests模块 / 解析JSON格式数据
+* 文件传输 - FTP协议 / ftplib模块 / 交互式FTP应用
+* 电子邮件 - SMTP协议 / POP3协议 / IMAP协议 / smtplib模块 / poplib模块 / imaplib模块
+* 短信服务 - twilio模块 / 国内的短信服务
 
 ## Django实战
 * 快速上手
@@ -165,26 +188,6 @@
     * 配置和使用uWSGI
     * 动静分离和Nginx配置
     * 配置HTTPS
-
-## 数据处理和机器学习
-* 机器学习基础
-* Pandas的应用
-    * 数据加载、存储与文件格式
-    * 数据清洗和准备
-    * 数据规整：聚合、合并和重塑
-    * 绘图和可视化
-    * 数据聚合与分组运算
-    * 时间序列
-* NumPy和SciPy的应用
-* Matplotlib和数据可视化
-* k最近邻(KNN)分类
-* 决策树
-* 贝叶斯分类
-* 支持向量机(SVM)
-* K-均值聚类
-* 回归分析
-* 大数据分析入门
-* Tensorflow入门
 
 ##### 内容参考
 * [Python-100-Days](https://github.com/jackfrued/Python-100-Days)
