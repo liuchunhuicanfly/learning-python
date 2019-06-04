@@ -72,8 +72,9 @@ def main():
 	print(str3) # '     jack 1  11    '
 
 
-# 执行函数
-main()
+if __name__ == '__main__':
+    main()
+
 
 
 

@@ -25,3 +25,6 @@ def main():
   # 给列表对象发出排序消息直接在列表对象上进行排序
   arr1.sort(reverse=True)
   print(arr1) # ['zoo', 'orange', 'internationalization', 'blueberry', 'apple']
+
+if __name__ == '__main__':
+    main()
