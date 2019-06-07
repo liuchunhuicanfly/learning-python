@@ -22,4 +22,4 @@ def main(code_len = 4):
 
 if __name__ == '__main__':
 	main()
-	
+	s
