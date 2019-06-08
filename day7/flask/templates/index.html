@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<link href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+  <form action="/api/upload" method="POST" enctype="multipart/form-data" class="form-horizontal" style="margin-top: 50px">
+    <div class="form-group">
+      <label for="name" class="col-md-3 col-sm-3 col-xs-12 control-label">File: </label>
+      <div class="col-md-8">
+        <input type="file" name="csv_file" id="csv_file" required="True" class="form-control">
+      </div>          
+    </div>
+    <div class="form-group">          
+      <div class="col-md-3 col-sm-3 col-xs-12 col-md-offset-3" style="margin-bottom:10px;">
+         <button type="button" id="submit" class="btn btn-primary"> <span class="glyphicon glyphicon-upload" style="margin-right:5px;"></span>Upload </button>
+      </div> 
+    </div>
+  </form>
+
+
+
+	<script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+ 	<script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	</script>
+	<script type="application/javascript">
+
+		$("#submit").click(function () {
+      var files = $('#csv_file').prop('files');
+      var data = new FormData();
+      data.append('file', files[0]);
+
+      $.ajax({
+          type: 'POST',
+          url: "/api/upload",
+          data: data,
+          cache: false,
+          processData: false,
+          contentType: false,
+          success: function (ret) {
+             console.log(ret)
+          }
+      });
+  	});
+	</script>
+	
+</body>
+</html>
