@@ -122,9 +122,21 @@ def main():
 	process_read.start()
 
 	process_write.join()
+	# 强行终止
 	process_read.terminate()
 	end_time = time()
 	print('总共耗时%.2f秒' % (end_time - start_time))
+"""
+Process to write: [6377]
+Put A to queue...
+Process to read: [6378]
+Get A form queue.
+Put B to queue...
+Get B form queue.
+Put C to queue...
+Get C form queue.
+总共耗时22.02秒
+"""
 
 if __name__ == '__main__':
 	main()
